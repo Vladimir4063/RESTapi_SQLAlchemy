@@ -34,6 +34,10 @@ class TaskSchema(ma.Schema):
 task_schema = TaskSchema()
 tasks_schema = TaskSchema(many = True) #Multiples respuestas
 
+@app.route('/')
+def index():
+    return jsonify({'message':'Welcome to my API'})
+
 @app.route('/tasks', methods = ['POST']) #Puedo probar la ruta, enviando un POST al task
 def create_task(): #Guardo datos
     title = request.json['title'] #Guardo lo enviado por json
@@ -50,7 +54,7 @@ def create_task(): #Guardo datos
     #return 'received' #Informa al postman, que se recibio el valor.
 
 @app.route('/tasks', methods = ['GET'])
-def get_tasks(): #Obtener datos todos los guardados
+def get_tasks():  # Obtener todos los datos guardados
     all_tasks = Task.query.all() #Muestrame todas las tareas guardadas
     result = tasks_schema.dump(all_tasks)
     return jsonify(result)
@@ -59,6 +63,28 @@ def get_tasks(): #Obtener datos todos los guardados
 def get_task(id):
     task = Task.query.get(id) #obten de BD
     return task_schema.jsonify(task) #view task console postman
+
+@app.route('/tasks/<id>', methods = ['PUT'])
+def update_task(id):
+    task = Task.query.get(id) #guardo
+
+    title = request.json['title'] # Obtengo y guardo los datos en variables
+    description = request.json['description']
+
+    task.title = title # add 
+    task.description = description # add
+
+    db.session.commit()
+    return task_schema.jsonify(task) # view task actuality
+
+@app.route('/tasks/<id>', methods = ['DELETE'])
+def delete_task(id):
+    task = Task.query.get(id) #get task
+    db.session.delete(task) #delete task
+    db.session.commit() #close operation
+
+    return task_schema.jsonify(task) #view deleted task
+
 if __name__ == "__main__":
     app.run(debug = True)
 
