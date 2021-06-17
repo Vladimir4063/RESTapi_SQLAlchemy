@@ -1,6 +1,4 @@
-from logging import debug
 from flask import Flask, request, jsonify
-from flask.wrappers import Request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
