@@ -45,7 +45,7 @@ def create_task(): #Guardo datos
     db.session.add(new_Task) #asigna la tarea en bd
     db.session.commit() #termina la operacion
     
-    return task_schema.jsonify(new_Task) #Vemos por consola lo que acabamos de guardar en bs
+    return task_schema.jsonify(new_Task) #Vemos por consola lo que acabamos de guardar en bbdd
 
 
     #print(request.json) #imprime en consola el valor ingresado por task(route)
